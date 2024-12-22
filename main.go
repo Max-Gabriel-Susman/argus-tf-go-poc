@@ -15,7 +15,7 @@ func worker(
 	workerId int,
 	ingress stream.Source,
 	detection *object.Detection,
-	// openCV *opencv.OpenCVImageProcessor,
+	openCV *opencv.OpenCVImageProcessor,
 ) {
 	fmt.Printf("WORKER ID [%v] - SOURCE [%v]\n", workerId, ingress.Label)
 
@@ -42,7 +42,6 @@ func main() {
 	// openCV := opencv.NewOpenCVImageProcessor()
 
 	modelPath, err := filepath.Abs("data/models/ssd_mobilenet_v1_coco_2018_01_28/saved_model")
-	// _, err := filepath.Abs("data/models/ssd_mobilenet_v1_coco_2018_01_28/saved_model")
 	if err != nil {
 		log.Fatal(err)
 	}
