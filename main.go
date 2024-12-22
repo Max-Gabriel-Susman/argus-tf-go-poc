@@ -6,12 +6,14 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/object"
 	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/stream"
 )
 
 func worker(
 	workerId int,
 	ingress stream.Source,
+	detection *object.Detection,
 	// openCV *opencv.OpenCVImageProcessor,
 	// runDetectionUseCase *usecase.RunDetectionUseCase,
 ) {
@@ -52,7 +54,7 @@ func main() {
 	// defer model.Session.Close()
 	// defer tfSession.Close()
 
-	// runDetectionUseCase := usecase.NewRunDetectionUseCase(tf, openCV)
+	detection := object.NewDetection()
 
 	log.Println("Argus Stream Engine Service online.")
 
@@ -61,7 +63,7 @@ func main() {
 		defer wg.Done()
 
 		// go worker(index+1, camera, openCV, runDetectionUseCase)
-		go worker(index+1, camera)
+		go worker(index+1, camera, detection)
 	}
 
 	// wg.Wait() // all goroutines are asleep - deadlock!
