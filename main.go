@@ -1,10 +1,37 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"path/filepath"
 	"sync"
+
+	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/stream"
 )
+
+func worker(
+	workerId int,
+	ingress stream.Source,
+	// openCV *opencv.OpenCVImageProcessor,
+	// runDetectionUseCase *usecase.RunDetectionUseCase,
+) {
+	fmt.Printf("WORKER ID [%v] - SOURCE [%v]\n", workerId, ingress.Label)
+
+	// openCV.CaptureStreamVideo(camera.Input, runDetectionUseCase.Execute)
+}
+
+// List of ingresses to run object detection
+func getingresses() (ingresses []stream.Source) {
+	ingresses = []stream.Source{
+		{
+			ID:    "1",
+			Label: "Camera 1",
+			Input: "rtsp://host:port",
+		},
+	}
+
+	return ingresses
+}
 
 func main() {
 	wg := sync.WaitGroup{}
@@ -29,12 +56,13 @@ func main() {
 
 	log.Println("Argus Stream Engine Service online.")
 
-	// for index, camera := range getCameras() {
-	// 	wg.Add(1)
-	// 	defer wg.Done()
+	for index, camera := range getingresses() {
+		wg.Add(1)
+		defer wg.Done()
 
-	// 	go worker(index+1, camera, openCV, runDetectionUseCase)
-	// }
+		// go worker(index+1, camera, openCV, runDetectionUseCase)
+		go worker(index+1, camera)
+	}
 
-	wg.Wait()
+	// wg.Wait() // all goroutines are asleep - deadlock!
 }
