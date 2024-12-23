@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/object"
+	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/opencv"
 	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/stream"
 	"github.com/Max-Gabriel-Susman/argus-tf-go-poc/internal/tensorflow"
 )
@@ -39,7 +40,7 @@ func main() {
 	wg := sync.WaitGroup{}
 
 	tf := tensorflow.NewTensorflowMachineLearning()
-	// openCV := opencv.NewOpenCVImageProcessor()
+	openCV := opencv.NewOpenCVImageProcessor()
 
 	modelPath, err := filepath.Abs("data/models/ssd_mobilenet_v1_coco_2018_01_28/saved_model")
 	if err != nil {
@@ -61,8 +62,8 @@ func main() {
 		wg.Add(1)
 		defer wg.Done()
 
-		// go worker(index+1, camera, openCV, detection)
-		go worker(index+1, camera, detection)
+		go worker(index+1, camera, detection, openCV)
+		// go worker(index+1, camera, detection)
 	}
 
 	// wg.Wait() // all goroutines are asleep - deadlock!
